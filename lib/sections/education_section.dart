@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 
 class EducationSection extends StatelessWidget {
   const EducationSection({super.key});
@@ -26,6 +26,8 @@ class EducationSection extends StatelessWidget {
       },
     ];
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return SectionWrapper(
       title: "Academic Path",
       subtitle: "EDUCATION",
@@ -34,18 +36,17 @@ class EducationSection extends StatelessWidget {
           final edu = education[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-            child: GlassCard(
-              opacity: 0.04,
+            child: PremiumCard(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.03),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(edu["icon"] as IconData, color: AppColors.primary, size: 28),
+                    child: Icon(edu["icon"] as IconData, color: AppColors.accent, size: 28),
                   ),
                   const SizedBox(width: AppSpacing.lg),
                   Expanded(
@@ -58,23 +59,24 @@ class EducationSection extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 edu["degree"] as String,
-                                style: const TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w800,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
                                 ),
                               ),
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.1),
+                                color: AppColors.accent.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
                                 edu["period"] as String,
                                 style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.accent,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 12,
                                 ),
                               ),
@@ -85,8 +87,8 @@ class EducationSection extends StatelessWidget {
                         Text(
                           edu["institution"] as String,
                           style: TextStyle(
-                            color: AppColors.primary.withOpacity(0.9),
-                            fontWeight: FontWeight.w600,
+                            color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
+                            fontWeight: FontWeight.w500,
                             fontSize: 16,
                           ),
                         ),
@@ -103,7 +105,7 @@ class EducationSection extends StatelessWidget {
                   ),
                 ],
               ),
-            ).animate().fadeIn(delay: (index * 150).ms).slideX(begin: 0.1, end: 0),
+            ).animate().fadeIn(delay: (index * 100).ms).slideX(begin: 0.05, end: 0),
           );
         }),
       ),

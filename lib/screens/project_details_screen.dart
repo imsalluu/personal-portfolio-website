@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../core/providers.dart';
 import '../core/constants.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 
 class ProjectDetailsScreen extends StatelessWidget {
   final Map<String, String> project;
@@ -18,18 +16,18 @@ class ProjectDetailsScreen extends StatelessWidget {
     final isMobile = size.width < 800;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+      backgroundColor: isDark ? AppColors.darkBgStart : Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 400,
             pinned: true,
-            backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+            backgroundColor: isDark ? AppColors.darkBgStart : Colors.white,
             leading: IconButton(
               icon: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.arrow_back_rounded, color: Colors.white),
@@ -51,7 +49,7 @@ class ProjectDetailsScreen extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          isDark ? const Color(0xFF0F172A) : Colors.white,
+                          isDark ? AppColors.darkBgStart : Colors.white,
                         ],
                       ),
                     ),
@@ -71,12 +69,12 @@ class ProjectDetailsScreen extends StatelessWidget {
                     project['title']!,
                     style: TextStyle(
                       fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      color: isDark ? Colors.white : AppColors.textMainLight,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
                       letterSpacing: -0.5,
                       height: 1.1,
                     ),
-                  ).animate().fadeIn().slideY(begin: 0.2, end: 0),
+                  ).animate().fadeIn().slideY(begin: 0.1, end: 0),
                   const SizedBox(height: 16),
                   Wrap(
                     spacing: 8,
@@ -85,21 +83,20 @@ class ProjectDetailsScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
+                          color: isDark ? AppColors.borderDark : Colors.black.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppColors.primary.withOpacity(0.2)),
                         ),
                         child: Text(
                           t, 
-                          style: const TextStyle(
-                            color: AppColors.primary, 
-                            fontWeight: FontWeight.bold,
+                          style: TextStyle(
+                            color: isDark ? AppColors.textMainDark : AppColors.textMainLight, 
+                            fontWeight: FontWeight.w600,
                             fontSize: 12,
                           ),
                         ),
                       )
                     ).toList(),
-                  ).animate().fadeIn(delay: 200.ms),
+                  ).animate().fadeIn(delay: 100.ms),
                   
                   const SizedBox(height: 40),
 
@@ -156,16 +153,16 @@ class ProjectDetailsScreen extends StatelessWidget {
           "Project Overview",
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white : AppColors.textMainLight,
+            fontWeight: FontWeight.w700,
+            color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
           ),
         ),
         const SizedBox(height: 16),
         Text(
           project['desc']!,
           style: TextStyle(
-            fontSize: 17,
-            height: 1.7,
+            fontSize: 16,
+            height: 1.6,
             color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
           ),
         ),
@@ -181,8 +178,8 @@ class ProjectDetailsScreen extends StatelessWidget {
           "Key Features",
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white : AppColors.textMainLight,
+            fontWeight: FontWeight.w700,
+            color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
           ),
         ),
         const SizedBox(height: 20),
@@ -195,44 +192,41 @@ class ProjectDetailsScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
+        PremiumCard(
           padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: isDark ? Colors.white.withOpacity(0.05) : Colors.grey.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: isDark ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.05)),
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "Project Status", 
                 style: TextStyle(
-                  color: isDark ? Colors.grey : Colors.grey[600], 
+                  color: isDark ? AppColors.textDimDark : AppColors.textDimLight, 
                   fontSize: 13,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.w600
                 )
               ),
               const SizedBox(height: 8),
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.check_circle_rounded, color: Colors.green, size: 20),
-                  SizedBox(width: 8),
-                  Text("Completed", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const Icon(Icons.check_circle_rounded, color: AppColors.accent, size: 20),
+                  const SizedBox(width: 8),
+                  Text("Completed", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: isDark ? AppColors.textMainDark : AppColors.textMainLight)),
                 ],
               ),
               const SizedBox(height: 24),
               _LinkButton(
                 label: "View Live Demo",
                 icon: FontAwesomeIcons.globe,
-                color: AppColors.primary,
+                color: AppColors.accent,
+                isDark: isDark,
                 onTap: () {},
               ),
               const SizedBox(height: 12),
               _LinkButton(
                 label: "Source Code",
                 icon: FontAwesomeIcons.github,
-                color: isDark ? Colors.white : Colors.black,
+                color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
+                isDark: isDark,
                 outline: true,
                 onTap: () {},
               ),
@@ -263,12 +257,12 @@ class _FeatureList extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(
           children: [
-            const Icon(Icons.bolt_rounded, color: AppColors.secondary, size: 20),
+            const Icon(Icons.check, color: AppColors.accent, size: 18),
             const SizedBox(width: 12),
             Text(
               f,
               style: TextStyle(
-                color: isDark ? Colors.white70 : Colors.black87,
+                color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
               ),
@@ -285,6 +279,7 @@ class _LinkButton extends StatelessWidget {
   final IconData icon;
   final Color color;
   final bool outline;
+  final bool isDark;
   final VoidCallback onTap;
 
   const _LinkButton({
@@ -292,6 +287,7 @@ class _LinkButton extends StatelessWidget {
     required this.icon, 
     required this.color, 
     this.outline = false,
+    required this.isDark,
     required this.onTap,
   });
 
@@ -299,26 +295,26 @@ class _LinkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(8),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: outline ? null : color,
-          border: outline ? Border.all(color: color, width: 2) : null,
-          borderRadius: BorderRadius.circular(12),
+          color: outline ? Colors.transparent : color,
+          border: outline ? Border.all(color: isDark ? AppColors.borderDark : Colors.black.withValues(alpha: 0.1), width: 1) : null,
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(icon, color: outline ? color : Colors.white, size: 18),
+            FaIcon(icon, color: outline ? color : Colors.white, size: 16),
             const SizedBox(width: 12),
             Text(
               label,
               style: TextStyle(
                 color: outline ? color : Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
               ),
             ),
           ],

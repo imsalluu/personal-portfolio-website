@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 
 class ReviewsSection extends StatefulWidget {
   const ReviewsSection({super.key});
@@ -102,7 +102,7 @@ class _ReviewsSectionState extends State<ReviewsSection> {
         child: Column(
           children: [
           SizedBox(
-            height: 400, // Increased height to prevent overflow
+            height: 380, // Height for review card
             child: PageView.builder(
               controller: _pageController,
               onPageChanged: (idx) => setState(() => _currentPage = idx),
@@ -115,14 +115,13 @@ class _ReviewsSectionState extends State<ReviewsSection> {
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 700),
-                      child: GlassCard(
-                        opacity: isDark ? 0.1 : 0.05,
-                        child: SingleChildScrollView( // Added scrolling to prevent overflow
+                      child: PremiumCard(
+                        child: SingleChildScrollView(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const FaIcon(FontAwesomeIcons.quoteLeft, size: 30, color: AppColors.primary),
+                              const FaIcon(FontAwesomeIcons.quoteLeft, size: 30, color: AppColors.accent),
                               const SizedBox(height: AppSpacing.lg),
                               Text(
                                 r["review"] as String,
@@ -130,7 +129,7 @@ class _ReviewsSectionState extends State<ReviewsSection> {
                                 style: TextStyle(
                                   fontSize: 18, 
                                   fontStyle: FontStyle.italic, 
-                                  color: isDark ? Colors.white : AppColors.textMainLight, 
+                                  color: isDark ? AppColors.textMainDark : AppColors.textMainLight, 
                                   height: 1.6
                                 ),
                               ),
@@ -140,8 +139,8 @@ class _ReviewsSectionState extends State<ReviewsSection> {
                                 children: [
                                   CircleAvatar(
                                     radius: 24,
-                                    backgroundColor: AppColors.primary.withOpacity(0.2),
-                                    child: const Icon(Icons.person, color: AppColors.primary),
+                                    backgroundColor: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.05),
+                                    child: const Icon(Icons.person, color: AppColors.accent),
                                   ),
                                   const SizedBox(width: AppSpacing.md),
                                   Flexible(
@@ -151,9 +150,9 @@ class _ReviewsSectionState extends State<ReviewsSection> {
                                         Text(
                                           r["name"] as String,
                                           style: TextStyle(
-                                            fontWeight: FontWeight.bold, 
+                                            fontWeight: FontWeight.w700, 
                                             fontSize: 18, 
-                                            color: isDark ? Colors.white : AppColors.textMainLight
+                                            color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
                                           ),
                                         ),
                                         Text(
@@ -174,7 +173,7 @@ class _ReviewsSectionState extends State<ReviewsSection> {
                                 children: List.generate(5, (i) => Icon(
                                   Icons.star_rounded, 
                                   size: 20, 
-                                  color: i < (r["stars"] as int) ? Colors.amber : Colors.grey.withOpacity(0.3),
+                                  color: i < (r["stars"] as int) ? const Color(0xFFFBBF24) : Colors.grey.withOpacity(0.3),
                                 )),
                               ),
                             ],
@@ -188,21 +187,20 @@ class _ReviewsSectionState extends State<ReviewsSection> {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Wrap( // Changed to Wrap to handle many dots on mobile
+          Wrap( 
             alignment: WrapAlignment.center,
-            spacing: 6,
-            runSpacing: 6,
+            spacing: 8,
+            runSpacing: 8,
             children: List.generate(reviews.length, (i) => GestureDetector(
               onTap: () => _pageController.animateToPage(i, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                width: _currentPage == i ? 32 : 12,
+                width: _currentPage == i ? 32 : 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  gradient: _currentPage == i 
-                    ? const LinearGradient(colors: [AppColors.primary, AppColors.secondary])
-                    : null,
-                  color: _currentPage == i ? null : AppColors.primary.withOpacity(0.2),
+                  color: _currentPage == i 
+                    ? AppColors.textMainDark
+                    : (isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1)),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),

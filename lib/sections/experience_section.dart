@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
@@ -28,6 +28,8 @@ class ExperienceSection extends StatelessWidget {
       },
     ];
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return SectionWrapper(
       title: "My Journey",
       subtitle: "EXPERIENCE ROADMAP",
@@ -45,16 +47,16 @@ class ExperienceSection extends StatelessWidget {
                   isFirst: index == 0,
                   isLast: isLast,
                   isCurrent: exp["isCurrent"] as bool,
+                  isDark: isDark,
                 ),
                 const SizedBox(width: AppSpacing.xl),
                 // content
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
-                    child: GlassCard(
-                      opacity: (exp["isCurrent"] as bool) ? 0.1 : 0.05,
+                    child: PremiumCard(
                       border: (exp["isCurrent"] as bool) 
-                        ? Border.all(color: AppColors.primary.withOpacity(0.3), width: 2)
+                        ? Border.all(color: AppColors.accent.withOpacity(0.5), width: 1.5)
                         : null,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,23 +67,24 @@ class ExperienceSection extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   exp["role"] as String,
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                    color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
                                   ),
                                 ),
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.1),
+                                  color: AppColors.accent.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
                                   exp["period"] as String,
                                   style: const TextStyle(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.accent,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -92,19 +95,22 @@ class ExperienceSection extends StatelessWidget {
                           Text(
                             exp["company"] as String,
                             style: TextStyle(
-                              color: AppColors.primary.withOpacity(0.8),
-                              fontWeight: FontWeight.w600,
+                              color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
+                              fontWeight: FontWeight.w500,
                               fontSize: 16,
                             ),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           Text(
                             exp["desc"] as String,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontSize: 15,
+                              height: 1.6,
+                            ),
                           ),
                         ],
                       ),
-                    ).animate().fadeIn(delay: (index * 200).ms).slideX(begin: 0.1),
+                    ).animate().fadeIn(delay: (index * 100).ms).slideX(begin: 0.05),
                   ),
                 ),
               ],
@@ -120,11 +126,13 @@ class _TimelineIndicator extends StatelessWidget {
   final bool isFirst;
   final bool isLast;
   final bool isCurrent;
+  final bool isDark;
 
   const _TimelineIndicator({
     required this.isFirst,
     required this.isLast,
     required this.isCurrent,
+    required this.isDark,
   });
 
   @override
@@ -134,34 +142,34 @@ class _TimelineIndicator extends StatelessWidget {
         Expanded(
           child: Container(
             width: 2,
-            color: isFirst ? Colors.transparent : AppColors.primary.withOpacity(0.2),
+            color: isFirst ? Colors.transparent : (isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1)),
           ),
         ),
         Container(
-          width: 24,
-          height: 24,
+          width: 20,
+          height: 20,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isCurrent ? AppColors.primary : Colors.transparent,
+            color: isCurrent ? AppColors.accent : (isDark ? AppColors.surfaceDark : Colors.white),
             border: Border.all(
-              color: AppColors.primary,
-              width: 3,
+              color: isCurrent ? AppColors.accent : (isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1)),
+              width: 2,
             ),
             boxShadow: isCurrent ? [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.5),
+                color: AppColors.accent.withOpacity(0.3),
                 blurRadius: 10,
               )
             ] : null,
           ),
           child: isCurrent ? const Center(
-            child: Icon(Icons.check, size: 14, color: Colors.white),
+            child: Icon(Icons.check, size: 12, color: Colors.white),
           ) : null,
         ),
         Expanded(
           child: Container(
             width: 2,
-            color: isLast ? Colors.transparent : AppColors.primary.withOpacity(0.2),
+            color: isLast ? Colors.transparent : (isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1)),
           ),
         ),
       ],

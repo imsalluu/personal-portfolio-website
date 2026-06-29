@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactSection extends StatefulWidget {
@@ -111,14 +111,16 @@ class _ContactSectionState extends State<ContactSection> {
         Text(
           "Let's talk about your project", 
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: isDark ? Colors.white : AppColors.textMainLight,
+            color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
+            fontWeight: FontWeight.w700,
           )
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
           "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.",
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: isDark ? AppColors.textDimDark : AppColors.textDimLight
+            color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
+            height: 1.5,
           ),
         ),
         const SizedBox(height: AppSpacing.xl),
@@ -130,22 +132,22 @@ class _ContactSectionState extends State<ContactSection> {
           children: [
             _SocialIcon(
               icon: FontAwesomeIcons.linkedinIn, 
-              color: const Color(0xFF0077B5),
+              color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
               onTap: () => _launchUrl("https://www.linkedin.com/in/im-salluu/"),
             ),
             _SocialIcon(
               icon: FontAwesomeIcons.github, 
-              color: isDark ? Colors.white : Colors.black,
+              color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
               onTap: () => _launchUrl("https://github.com/imsalluu"),
             ),
             _SocialIcon(
               icon: FontAwesomeIcons.facebookF, 
-              color: const Color(0xFF1877F2),
+              color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
               onTap: () => _launchUrl("https://www.facebook.com/imsalluuu"),
             ),
             _SocialIcon(
               icon: FontAwesomeIcons.instagram, 
-              color: const Color(0xFFE1306C),
+              color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
               onTap: () => _launchUrl("https://www.instagram.com/im_salluuu"),
             ),
           ],
@@ -155,8 +157,7 @@ class _ContactSectionState extends State<ContactSection> {
   }
 
   Widget _buildForm(BuildContext context, bool isDark) {
-    return GlassCard(
-      opacity: isDark ? 0.05 : 0.02,
+    return PremiumCard(
       child: Form(
         key: _formKey,
         child: Column(
@@ -169,41 +170,29 @@ class _ContactSectionState extends State<ContactSection> {
             const SizedBox(height: AppSpacing.xl),
             SizedBox(
               width: double.infinity,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
+              child: ElevatedButton(
+                onPressed: _isSubmitting ? null : _submitForm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.accent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.all(20),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  elevation: 0,
+                ),
+                child: _isSubmitting
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                     )
-                  ],
-                ),
-                child: ElevatedButton(
-                  onPressed: _isSubmitting ? null : _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.all(20),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    elevation: 0,
-                  ),
-                  child: _isSubmitting
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                      )
-                    : const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Send Message", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                          SizedBox(width: 8),
-                          Icon(Icons.send_rounded, size: 18),
-                        ],
-                      ),
-                ),
+                  : const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Send Message", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                        SizedBox(width: 8),
+                        Icon(Icons.send, size: 16),
+                      ],
+                    ),
               ),
             ),
           ],
@@ -216,7 +205,7 @@ class _ContactSectionState extends State<ContactSection> {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
-      style: TextStyle(color: isDark ? Colors.white : AppColors.textMainLight),
+      style: TextStyle(color: isDark ? AppColors.textMainDark : AppColors.textMainLight),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter your \$label';
@@ -228,25 +217,25 @@ class _ContactSectionState extends State<ContactSection> {
       },
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: AppColors.primary, size: 20),
+        prefixIcon: Icon(icon, color: AppColors.accent, size: 20),
         labelStyle: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight),
         filled: true,
-        fillColor: (isDark ? Colors.white : Colors.black).withOpacity(0.05),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        fillColor: isDark ? AppColors.surfaceDark : Colors.white,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1))),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.primary.withOpacity(0.1)),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.accent, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.red, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
       ),
@@ -271,17 +260,17 @@ class _ContactInfoItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
+              color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.04),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 24),
+            child: Icon(icon, color: AppColors.accent, size: 20),
           ),
           const SizedBox(width: AppSpacing.md),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight, fontSize: 12, fontWeight: FontWeight.w600)),
-              Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: isDark ? Colors.white : AppColors.textMainLight)),
+              Text(label, style: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight, fontSize: 12, fontWeight: FontWeight.w500)),
+              Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: isDark ? AppColors.textMainDark : AppColors.textMainLight)),
             ],
           ),
         ],
@@ -303,15 +292,17 @@ class _SocialIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Container(
       margin: const EdgeInsets.only(right: AppSpacing.md),
       child: IconButton(
-        icon: FaIcon(icon, color: color.withOpacity(0.8), size: 22),
+        icon: FaIcon(icon, color: color, size: 18),
         onPressed: onTap,
         style: IconButton.styleFrom(
-          backgroundColor: color.withOpacity(0.1),
-          padding: const EdgeInsets.all(12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.04),
+          padding: const EdgeInsets.all(14),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     );
@@ -330,19 +321,12 @@ class _SuccessDialog extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 400),
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E293B) : Colors.white,
-          borderRadius: BorderRadius.circular(24),
+          color: isDark ? AppColors.surfaceDark : Colors.white,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: AppColors.primary.withOpacity(0.3),
-            width: 2,
+            color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1),
+            width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withOpacity(0.2),
-              blurRadius: 40,
-              offset: const Offset(0, 20),
-            ),
-          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -350,22 +334,22 @@ class _SuccessDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.accent.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
-                Icons.check_circle_rounded,
-                color: AppColors.primary,
-                size: 64,
+                Icons.check,
+                color: AppColors.accent,
+                size: 40,
               ),
             ),
             const SizedBox(height: 24),
             Text(
               'Message Sent!',
               style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : AppColors.textMainLight,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
               ),
             ),
             const SizedBox(height: 12),
@@ -373,7 +357,7 @@ class _SuccessDialog extends StatelessWidget {
               'Thank you for reaching out! I\'ll get back to you soon.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
               ),
             ),
@@ -383,16 +367,16 @@ class _SuccessDialog extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.accent,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: const Text(
-                  'Got it!',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  'Got it',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -419,19 +403,12 @@ class _ErrorDialog extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 400),
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E293B) : Colors.white,
-          borderRadius: BorderRadius.circular(24),
+          color: isDark ? AppColors.surfaceDark : Colors.white,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Colors.red.withOpacity(0.3),
-            width: 2,
+            color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1),
+            width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.red.withOpacity(0.2),
-              blurRadius: 40,
-              offset: const Offset(0, 20),
-            ),
-          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -443,18 +420,18 @@ class _ErrorDialog extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Icon(
-                Icons.error_rounded,
+                Icons.error_outline,
                 color: Colors.red,
-                size: 64,
+                size: 40,
               ),
             ),
             const SizedBox(height: 24),
             Text(
               'Oops!',
               style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : AppColors.textMainLight,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
               ),
             ),
             const SizedBox(height: 12),
@@ -462,7 +439,7 @@ class _ErrorDialog extends StatelessWidget {
               'Something went wrong. Please try again.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
               ),
             ),
@@ -476,12 +453,12 @@ class _ErrorDialog extends StatelessWidget {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: const Text(
                   'Close',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
               ),
             ),

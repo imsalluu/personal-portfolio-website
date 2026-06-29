@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/providers.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 import '../screens/project_details_screen.dart';
 
 class ProjectsSection extends StatelessWidget {
@@ -72,7 +72,7 @@ class ProjectsSection extends StatelessWidget {
             description: p["desc"]!,
             techStack: p["tech"]!,
             imageUrl: p["img"]!,
-          ).animate().fadeIn(delay: (index * 150).ms).slideY(begin: 0.2, end: 0);
+          ).animate().fadeIn(delay: (index * 100).ms).slideY(begin: 0.1, end: 0);
         },
       ),
     );
@@ -101,6 +101,8 @@ class _ProjectCardState extends ConsumerState<_ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
@@ -121,11 +123,12 @@ class _ProjectCardState extends ConsumerState<_ProjectCard> {
           );
         },
         child: AnimatedScale(
-        scale: isHovered ? 1.03 : 1.0,
-        duration: 300.ms,
+        scale: isHovered ? 1.02 : 1.0,
+        duration: 250.ms,
         curve: Curves.easeOut,
-        child: GlassCard(
+        child: PremiumCard(
           padding: EdgeInsets.zero,
+          isHovered: isHovered,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -133,20 +136,30 @@ class _ProjectCardState extends ConsumerState<_ProjectCard> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                     image: DecorationImage(
                       image: NetworkImage(widget.imageUrl),
                       fit: BoxFit.cover,
                     ),
                   ),
                   child: AnimatedContainer(
-                    duration: 300.ms,
-                    color: isHovered ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.5),
+                    duration: 250.ms,
+                    color: isHovered ? Colors.black.withOpacity(0.1) : Colors.black.withOpacity(0.4),
                     child: Center(
                       child: AnimatedOpacity(
-                        duration: 300.ms,
+                        duration: 250.ms,
                         opacity: isHovered ? 1.0 : 0.0,
-                        child: const Icon(FontAwesomeIcons.arrowUpRightFromSquare, color: Colors.white, size: 30),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)
+                            ],
+                          ),
+                          child: const Icon(FontAwesomeIcons.arrowUpRightFromSquare, color: Colors.black, size: 20),
+                        ),
                       ),
                     ),
                   ),
@@ -159,34 +172,34 @@ class _ProjectCardState extends ConsumerState<_ProjectCard> {
                   children: [
                     Text(
                       widget.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: isDark ? AppColors.textMainDark : AppColors.textMainLight),
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
                       widget.description,
-                      style: TextStyle(color: AppColors.textDimDark, fontSize: 13, height: 1.5),
+                      style: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight, fontSize: 13, height: 1.5),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Wrap(
                       spacing: 8,
+                      runSpacing: 8,
                       children: widget.techStack.split(', ').map((t) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
+                          color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.04),
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: AppColors.primary.withOpacity(0.2)),
                         ),
-                        child: Text(t, style: const TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold)),
+                        child: Text(t, style: TextStyle(color: isDark ? AppColors.textMainDark : AppColors.textMainLight, fontSize: 11, fontWeight: FontWeight.w600)),
                       )).toList(),
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     Row(
                       children: [
-                        _SmallButton(icon: FontAwesomeIcons.globe, label: "Live", onTap: () {}),
+                        _SmallButton(icon: FontAwesomeIcons.globe, label: "Live", isDark: isDark, onTap: () {}),
                         const SizedBox(width: AppSpacing.md),
-                        _SmallButton(icon: FontAwesomeIcons.github, label: "Repo", onTap: () {}),
+                        _SmallButton(icon: FontAwesomeIcons.github, label: "Repo", isDark: isDark, onTap: () {}),
                       ],
                     ),
                   ],
@@ -204,9 +217,10 @@ class _ProjectCardState extends ConsumerState<_ProjectCard> {
 class _SmallButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final bool isDark;
   final VoidCallback onTap;
 
-  const _SmallButton({required this.icon, required this.label, required this.onTap});
+  const _SmallButton({required this.icon, required this.label, required this.isDark, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -214,16 +228,16 @@ class _SmallButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+          border: Border.all(color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.1)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
-            FaIcon(icon, size: 12, color: AppColors.primary),
-            const SizedBox(width: 6),
-            Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+            FaIcon(icon, size: 12, color: isDark ? AppColors.textMainDark : AppColors.textMainLight),
+            const SizedBox(width: 8),
+            Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: isDark ? AppColors.textMainDark : AppColors.textMainLight)),
           ],
         ),
       ),

@@ -32,7 +32,7 @@ class SectionWrapper extends StatelessWidget {
                 Text(
                   subtitle!.toUpperCase(),
                   style: const TextStyle(
-                    color: AppColors.primary,
+                    color: AppColors.accent,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 4,
                     fontSize: 14,
@@ -45,11 +45,11 @@ class SectionWrapper extends StatelessWidget {
                   title!,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                     letterSpacing: -1,
-                    color: isDark ? Colors.white : AppColors.textMainLight,
+                    color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
                   ),
-                ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
+                ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, end: 0),
                 const SizedBox(height: AppSpacing.xxl * 1.5),
               ],
               child,
@@ -60,3 +60,4 @@ class SectionWrapper extends StatelessWidget {
     );
   }
 }
+

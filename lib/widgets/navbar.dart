@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/providers.dart';
 import '../core/navigation.dart';
 import '../core/constants.dart';
-import 'glass_card.dart';
+import 'premium_card.dart';
 
 class Navbar extends ConsumerWidget {
   const Navbar({super.key});
@@ -16,10 +16,9 @@ class Navbar extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.lg),
-      child: GlassCard(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
+      child: PremiumCard(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.sm),
         borderRadius: 50,
-        opacity: 0.1,
         child: Row(
           children: [
             Text(
@@ -86,7 +85,7 @@ class _NavButtonState extends State<_NavButton> {
       child: TextButton(
         onPressed: widget.onTap,
         style: TextButton.styleFrom(
-          foregroundColor: isHovered ? AppColors.primary : (isDark ? Colors.white70 : Colors.black87),
+          foregroundColor: isHovered ? AppColors.primary : (isDark ? AppColors.textDimDark : AppColors.textDimLight),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
@@ -95,14 +94,11 @@ class _NavButtonState extends State<_NavButton> {
             children: [
               Text(
                 widget.title,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-              ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                height: 2,
-                width: isHovered ? 20 : 0,
-                color: AppColors.primary,
-                margin: const EdgeInsets.only(top: 4),
+                style: TextStyle(
+                  fontWeight: isHovered ? FontWeight.w600 : FontWeight.w500, 
+                  fontSize: 14,
+                  color: isHovered ? AppColors.primary : (isDark ? AppColors.textDimDark : AppColors.textDimLight),
+                ),
               ),
             ],
           ),

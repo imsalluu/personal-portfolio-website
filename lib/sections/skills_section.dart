@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
@@ -52,11 +52,11 @@ class SkillsSection extends StatelessWidget {
         children: [
           _SkillCategory(title: "Frameworks & Mobile", skills: frameworks, isDark: isDark, delay: 0),
           const SizedBox(height: AppSpacing.xl),
-          _SkillCategory(title: "Languages", skills: languages, isDark: isDark, delay: 200),
+          _SkillCategory(title: "Languages", skills: languages, isDark: isDark, delay: 100),
           const SizedBox(height: AppSpacing.xl),
-          _SkillCategory(title: "Cloud & Deployment", skills: cloudDeployment, isDark: isDark, delay: 400),
+          _SkillCategory(title: "Cloud & Deployment", skills: cloudDeployment, isDark: isDark, delay: 200),
           const SizedBox(height: AppSpacing.xl),
-          _SkillCategory(title: "Tools & Platforms", skills: tools, isDark: isDark, delay: 600),
+          _SkillCategory(title: "Tools & Platforms", skills: tools, isDark: isDark, delay: 300),
         ],
       ),
     );
@@ -79,8 +79,8 @@ class _SkillCategory extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569), // Slate-400/600
+            fontWeight: FontWeight.w600,
+            color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
           ),
         ).animate().fadeIn(delay: delay.ms),
         const SizedBox(height: AppSpacing.md),
@@ -93,7 +93,7 @@ class _SkillCategory extends StatelessWidget {
               name: skills[index]["name"]!,
               image: skills[index]["image"]!,
               isDark: isDark,
-            ).animate().fadeIn(delay: (delay + index * 50).ms).scale(duration: 400.ms, curve: Curves.easeOutBack);
+            ).animate().fadeIn(delay: (delay + index * 50).ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOut);
           }),
         ),
       ],
@@ -120,32 +120,28 @@ class _SquareSkillCardState extends State<_SquareSkillCard> {
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
-      child: GlassCard(
+      child: PremiumCard(
         width: 110,
         height: 110,
         padding: const EdgeInsets.all(16),
-        borderRadius: 16,
-        color: widget.isDark ? const Color(0xFF0F172A) : Colors.white,
-        opacity: isHovered ? (widget.isDark ? 0.3 : 0.8) : (widget.isDark ? 0.2 : 0.6),
-        border: isHovered 
-            ? Border.all(color: AppColors.primary.withOpacity(0.5), width: 1.5) 
-            : Border.all(color: (widget.isDark ? Colors.white : Colors.black).withOpacity(0.05)),
+        borderRadius: 12,
+        isHovered: isHovered,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (widget.image.endsWith('.svg'))
               SvgPicture.network(
                 widget.image,
-                width: 40,
-                height: 40,
-                placeholderBuilder: (_) => const SizedBox(width: 40, height: 40),
+                width: 36,
+                height: 36,
+                placeholderBuilder: (_) => const SizedBox(width: 36, height: 36),
               )
             else
               Image.network(
                 widget.image,
-                width: 40,
-                height: 40,
-                errorBuilder: (_, __, ___) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                width: 36,
+                height: 36,
+                errorBuilder: (_, __, ___) => const Icon(Icons.broken_image, size: 36, color: Colors.grey),
               ),
             const SizedBox(height: 12),
             Text(
@@ -153,8 +149,8 @@ class _SquareSkillCardState extends State<_SquareSkillCard> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: widget.isDark ? Colors.white : AppColors.textMainLight,
+                fontWeight: FontWeight.w500,
+                color: widget.isDark ? AppColors.textMainDark : AppColors.textMainLight,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

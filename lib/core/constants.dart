@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Cyan & Carbon Palette (Inspired by Jacob Aiden)
-  static const Color primary = Color(0xFF00A3FF); // Vibrant Cyan
-  static const Color secondary = Color(0xFF050B18); // Midnight Navy (Darker)
-  static const Color accent = Color(0xFF00FFE0); // Bright Turquoise Cyan
+  // Premium Minimal Dark Palette (Linear/Vercel inspired)
+  static const Color primary = Color(0xFFEDEDED); // Primary text/icons (almost white)
+  static const Color secondary = Color(0xFFA1A1AA); // Secondary text/icons (slate/gray)
+  static const Color accent = Color(0xFF0066FF); // Electric blue for primary actions
   
-  // Dark Theme - Carbon Obsidian
-  static const Color darkBgStart = Color(0xFF050A18); // Deep Midnight
-  static const Color darkBgEnd = Color(0xFF020409); // Near Black
+  // Backgrounds
+  static const Color darkBgStart = Color(0xFF0A0A0A);
+  static const Color darkBgEnd = Color(0xFF0A0A0A);
   static const List<Color> darkGradient = [
-    Color(0xFF050A18),
-    Color(0xFF020409),
+    Color(0xFF0A0A0A),
+    Color(0xFF0A0A0A),
   ];
   
-  // Light Theme - Ice & Glass
-  static const Color lightBgStart = Color(0xFFF0F9FF); // Very Light Cyan tint
-  static const Color lightBgEnd = Color(0xFFE0F2FE); // Soft Blue-ish tint
+  // Surface
+  static const Color surfaceDark = Color(0xFF141414);
+  static const Color borderDark = Color(0x1AFFFFFF); // 10% white
+
+  // We are keeping light variables but focusing on dark theme as requested
+  static const Color lightBgStart = Color(0xFFFFFFFF); 
+  static const Color lightBgEnd = Color(0xFFFFFFFF);
   static const List<Color> lightGradient = [
-    Color(0xFFF0F9FF),
-    Color(0xFFE0F2FE),
+    Color(0xFFFFFFFF),
+    Color(0xFFFFFFFF),
   ];
   
   // Text Colors
-  static const Color textMainDark = Color(0xFFFFFFFF);
-  static const Color textDimDark = Color(0xFFA0AEC0); // Blueish Gray
+  static const Color textMainDark = Color(0xFFEDEDED);
+  static const Color textDimDark = Color(0xFFA1A1AA);
   
-  static const Color textMainLight = Color(0xFF0F172A); // Midnight Navy
-  static const Color textDimLight = Color(0xFF475569); // Slate
+  static const Color textMainLight = Color(0xFF111111);
+  static const Color textDimLight = Color(0xFF666666);
 
-  // Branding / Special
-  static const Color hireMe = Color(0xFF00A3FF);
-  static const Color surfaceDark = Color(0x1A00A3FF); // Cyan glow surface
+  static const Color hireMe = Color(0xFFEDEDED);
 }
 
 class AppSpacing {
@@ -41,5 +43,5 @@ class AppSpacing {
   static const double lg = 24.0;
   static const double xl = 32.0;
   static const double xxl = 48.0;
-  static const double section = 60.0;
+  static const double section = 80.0; // Increased for better breathing room
 }

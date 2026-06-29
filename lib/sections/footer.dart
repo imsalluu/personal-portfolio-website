@@ -19,8 +19,8 @@ class Footer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
       decoration: BoxDecoration(
-        color: (isDark ? Colors.black : Colors.white).withOpacity(0.05),
-        border: Border(top: BorderSide(color: (isDark ? Colors.white : Colors.black).withOpacity(0.05))),
+        color: isDark ? AppColors.surfaceDark : Colors.white,
+        border: Border(top: BorderSide(color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.05))),
       ),
       child: Column(
         children: [
@@ -33,7 +33,7 @@ class Footer extends StatelessWidget {
                  onTap: () => _launchUrl("https://github.com/imsalluu"),
                ),
                _SocialLink(
-                 icon: FontAwesomeIcons.linkedin, 
+                 icon: FontAwesomeIcons.linkedinIn, 
                  isDark: isDark,
                  onTap: () => _launchUrl("https://www.linkedin.com/in/im-salluu/"),
                ),
@@ -43,7 +43,7 @@ class Footer extends StatelessWidget {
                  onTap: () => _launchUrl("https://www.instagram.com/im_salluuu"),
                ),
                _SocialLink(
-                 icon: FontAwesomeIcons.facebook, 
+                 icon: FontAwesomeIcons.facebookF, 
                  isDark: isDark,
                  onTap: () => _launchUrl("https://www.facebook.com/imsalluuu"),
                ),
@@ -52,14 +52,14 @@ class Footer extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           Text(
             "© 2026 Salman Hossain. All rights reserved.",
-            style: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight, fontSize: 14),
+            style: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight, fontSize: 13, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: AppSpacing.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Built with ", style: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight, fontSize: 12)),
-              const Icon(Icons.favorite, color: Colors.red, size: 14),
+              const Icon(Icons.favorite, color: Colors.red, size: 12),
               Text(" using Flutter", style: TextStyle(color: isDark ? AppColors.textDimDark : AppColors.textDimLight, fontSize: 12)),
             ],
           ),
@@ -85,9 +85,12 @@ class _SocialLink extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: IconButton(
-        icon: FaIcon(icon, size: 20, color: isDark ? AppColors.textDimDark : AppColors.textDimLight),
+        icon: FaIcon(icon, size: 18, color: isDark ? AppColors.textMainDark : AppColors.textMainLight),
         onPressed: onTap,
-        hoverColor: AppColors.primary.withOpacity(0.1),
+        hoverColor: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.04),
+        style: IconButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
       ),
     );
   }

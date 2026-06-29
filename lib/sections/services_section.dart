@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 
 class ServicesSection extends StatelessWidget {
   const ServicesSection({super.key});
@@ -34,7 +34,7 @@ class ServicesSection extends StatelessWidget {
             title: s["title"] as String,
             desc: s["desc"] as String,
             icon: s["icon"] as IconData,
-            delay: index * 100,
+            delay: index * 50,
           );
         }),
       ),
@@ -64,64 +64,55 @@ class _ServiceCardState extends State<_ServiceCard> {
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
-      child: GlassCard(
+      child: PremiumCard(
         width: 350, // Fixed width for wrap consistency
-        height: 280, // Allow sufficient height, content is scrollable if needed or clamped
-        opacity: isHovered ? (isDark ? 0.08 : 0.05) : (isDark ? 0.04 : 0.02),
-        border: isHovered ? Border.all(color: AppColors.primary.withOpacity(0.5), width: 2) : null,
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedContainer(
-                duration: 400.ms,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: isHovered ? AppColors.primary : AppColors.primary.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                  boxShadow: isHovered ? [
-                    BoxShadow(
-                      color: AppColors.primary.withOpacity(0.4),
-                      blurRadius: 20,
-                      spreadRadius: 2,
-                    )
-                  ] : null,
-                ),
-                child: FaIcon(
-                  widget.icon, 
-                  size: 32, 
-                  color: isHovered ? Colors.white : AppColors.primary,
-                ),
+        height: 280, // Allow sufficient height
+        isHovered: isHovered,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedContainer(
+              duration: 250.ms,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: isHovered 
+                  ? AppColors.accent 
+                  : (isDark ? AppColors.borderDark : Colors.black.withOpacity(0.05)),
+                shape: BoxShape.circle,
               ),
-              const SizedBox(height: AppSpacing.lg),
-              Text(
-                widget.title,
+              child: FaIcon(
+                widget.icon, 
+                size: 28, 
+                color: isHovered ? Colors.white : AppColors.accent,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              widget.title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w700, 
+                fontSize: 20, 
+                color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Expanded( 
+              child: Text(
+                widget.desc,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontWeight: FontWeight.w800, 
-                  fontSize: 20, 
-                  color: isDark ? Colors.white : AppColors.textMainLight,
+                  color: isDark ? AppColors.textDimDark : AppColors.textDimLight, 
+                  fontSize: 14, 
+                  height: 1.5,
                 ),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: AppSpacing.md),
-              Expanded( // Ensure description takes available space
-                child: Text(
-                  widget.desc,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: isDark ? AppColors.textDimDark : AppColors.textDimLight, 
-                    fontSize: 14, 
-                    height: 1.5,
-                  ),
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ).animate().fadeIn(delay: widget.delay.ms).slideY(begin: 0.1, end: 0),
+      ).animate().fadeIn(delay: widget.delay.ms).slideY(begin: 0.05, end: 0),
     );
   }
 }

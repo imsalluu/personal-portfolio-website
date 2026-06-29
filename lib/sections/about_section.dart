@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../core/constants.dart';
 import '../widgets/section_wrapper.dart';
-import '../widgets/glass_card.dart';
+import '../widgets/premium_card.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -33,38 +33,21 @@ class AboutSection extends StatelessWidget {
   }
 
   Widget _buildImage(bool isDark) {
-    return GlassCard(
+    return PremiumCard(
       padding: EdgeInsets.zero,
       child: Container(
         height: 480, // Reduced height on mobile to prevent scrolling fatigue/overflow
         constraints: const BoxConstraints(maxHeight: 500),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(24),
+          color: isDark ? AppColors.surfaceDark : Colors.white,
+          borderRadius: BorderRadius.circular(12),
           image: const DecorationImage(
             image: AssetImage("assets/images/profile.png"),
             fit: BoxFit.cover,
-            opacity: 0.9, // Increased opacity for visibility
           ),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [
-                AppColors.primary.withOpacity(0.4),
-                Colors.transparent,
-              ],
-            ),
-          ),
-          // child: const Center(
-          //   child: Icon(Icons.code_rounded, size: 80, color: Colors.white),
-          // ),
         ),
       ),
-    ).animate(onPlay: (c) => c.repeat(reverse: true))
-     .scale(duration: 3.seconds, begin: const Offset(1, 1), end: const Offset(1.02, 1.02), curve: Curves.easeInOutSine);
+    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1, end: 0);
   }
 
   List<Widget> _buildContent(BuildContext context, bool isDark) {
@@ -72,27 +55,28 @@ class AboutSection extends StatelessWidget {
       Text(
         "Passionate Flutter Developer based in Bangladesh",
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: AppColors.primary,
+          color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
           fontSize: 32,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
+          height: 1.3,
         ),
-      ).animate().fadeIn(duration: 800.ms).slideX(begin: 0.1, end: 0),
+      ).animate().fadeIn(duration: 800.ms).slideX(begin: 0.05, end: 0),
       const SizedBox(height: AppSpacing.lg),
       Text(
         "I am a results-oriented Mobile App Developer with a deep love for creating elegant, functional, and user-centric applications. With expertise in Flutter and Dart, I transform complex ideas into high-quality mobile experiences.",
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
+          color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
         ),
-      ).animate().fadeIn(duration: 800.ms, delay: 200.ms).slideX(begin: 0.1, end: 0),
+      ).animate().fadeIn(duration: 800.ms, delay: 200.ms).slideX(begin: 0.05, end: 0),
       const SizedBox(height: AppSpacing.md),
       Text(
         "My journey started with a curiosity for how apps work, which evolved into a professional career building robust solutions for clients worldwide. I believe in clean code, scalable architecture, and constant learning.",
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          color: isDark ? AppColors.textMainDark : AppColors.textMainLight,
+          color: isDark ? AppColors.textDimDark : AppColors.textDimLight,
         ),
-      ).animate().fadeIn(duration: 800.ms, delay: 400.ms).slideX(begin: 0.1, end: 0),
+      ).animate().fadeIn(duration: 800.ms, delay: 400.ms).slideX(begin: 0.05, end: 0),
       const SizedBox(height: AppSpacing.xl),
-      _buildKeyStrengths(isDark).animate().fadeIn(duration: 800.ms, delay: 600.ms).slideY(begin: 0.1, end: 0),
+      _buildKeyStrengths(isDark).animate().fadeIn(duration: 800.ms, delay: 600.ms).slideY(begin: 0.05, end: 0),
     ];
   }
 
@@ -110,20 +94,20 @@ class AboutSection extends StatelessWidget {
       children: strengths.map((s) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+          color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.03),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: isDark ? AppColors.borderDark : Colors.black.withOpacity(0.05)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle_rounded, size: 18, color: AppColors.primary),
+            const Icon(Icons.check, size: 16, color: AppColors.accent),
             const SizedBox(width: 8),
             Text(
               s, 
               style: TextStyle(
-                color: isDark ? Colors.white : AppColors.textMainLight, 
-                fontWeight: FontWeight.bold,
+                color: isDark ? AppColors.textMainDark : AppColors.textMainLight, 
+                fontWeight: FontWeight.w600,
                 fontSize: 14,
               )
             ),
